@@ -11,7 +11,7 @@ permissions:
 jobs:
   upload-previews:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
 
     steps:
       # DO NOT run actions/checkout here, for security reasons

@@ -19,7 +19,7 @@ permissions:
 jobs:
   codspeed-profiling:
     name: ${{ matrix.suite == 'benchmarks' && 'CodSpeed profiling' || format('Model corpus ({0})', matrix.suite) }}
-    runs-on: ubuntu-24.04
+    runs-on: graphide-linux-x64-4
     strategy:
       fail-fast: false
       matrix:
