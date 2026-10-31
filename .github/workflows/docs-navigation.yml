@@ -31,7 +31,7 @@ jobs:
     if: >-
       (github.event.action == 'labeled' && github.event.label.name == 'trigger:docs') ||
       (github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, 'trigger:docs'))
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     timeout-minutes: 5
     permissions:
       # Needed to post the queued comment and clean up a failed dispatch.

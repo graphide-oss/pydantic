@@ -16,7 +16,7 @@ jobs:
       github.event.pull_request.author_association != 'OWNER' &&
       github.event.pull_request.author_association != 'COLLABORATOR' &&
       !contains(github.event.pull_request.labels.*.name, 'skip-assignment-check')
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     steps:
       - name: Check referenced issues and close if unauthorized
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
