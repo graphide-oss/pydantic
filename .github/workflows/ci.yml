@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     name: Lint ${{ matrix.python-version }}
     strategy:
       fail-fast: false
@@ -47,7 +47,7 @@ jobs:
           UV_NO_PROGRESS: '1'
 
   core-build-sdist:
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     name: core / Build sdist
     permissions:
       contents: read
@@ -147,7 +147,7 @@ jobs:
           # was just a dummy variable to set a default value for target
           - target: undefined
 
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -220,9 +220,9 @@ jobs:
         interpreter: ['3.10', '3.11', '3.12', '3.13', '3.14', '3.14t', '3.15', '3.15t']
         include:
           - os: linux
-            runs-on: ubuntu-latest
+            runs-on: graphide-linux-x64-4
           - os: linux_aarch64
-            runs-on: ubuntu-24.04-arm
+            runs-on: graphide-linux-arm64-4
 
     runs-on: ${{ matrix.runs-on }}
     steps:
@@ -269,7 +269,7 @@ jobs:
 
   core-build-pyemscripten:
     name: core / Build PyEmscripten (${{ matrix.python-version }})
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     permissions:
       contents: read
       # Required to attest build provenance, verified by the release job:
@@ -346,7 +346,7 @@ jobs:
 
   core-bench:
     name: core / Run Rust benchmarks
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -370,7 +370,7 @@ jobs:
   core-test-builds-arch:
     name: core / Test build on ${{ matrix.target }}-${{ matrix.distro }}
     needs: [core-build]
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
 
     strategy:
       fail-fast: false
@@ -447,9 +447,9 @@ jobs:
         os: [linux, linuw_aarch64]
         include:
           - os: linux
-            runs-on: ubuntu-latest
+            runs-on: graphide-linux-x64-4
           - os: linuw_aarch64
-            runs-on: ubuntu-24.04-arm
+            runs-on: graphide-linux-arm64-4
 
     runs-on: ${{ matrix.runs-on }}
     steps:
@@ -488,7 +488,7 @@ jobs:
       matrix:
         os: [ubuntu]
 
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -522,7 +522,7 @@ jobs:
   core-test-msrv:
     name: core / Test MSRV
 
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -560,7 +560,7 @@ jobs:
   # test with a debug build as it picks up errors which optimised release builds do not
   core-test-debug:
     name: core / Test with debug build (${{ matrix.python-version }})
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
 
     strategy:
       fail-fast: false
@@ -602,7 +602,7 @@ jobs:
   core-test-python-debug:
     name: core / Test with debug Python (${{ matrix.python-version }})
     if: startsWith(github.ref, 'refs/tags/') || contains(github.event.pull_request.labels.*.name, 'full build')
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
 
     strategy:
       fail-fast: false
@@ -643,7 +643,7 @@ jobs:
   test-pyemscripten:
     name: Test build on PyEmscripten (Pyodide) (${{ matrix.python-version }})
     needs: [core-build-pyemscripten]
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     strategy:
       fail-fast: false
       matrix:
@@ -680,7 +680,7 @@ jobs:
           python -c 'from pydantic_core._pydantic_core import build_info; print(f"{build_info=}")'
 
   build-pydantic:
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     if: startsWith(github.ref, 'refs/tags/')
     permissions:
       contents: read
@@ -723,7 +723,7 @@ jobs:
           path: dist
 
   docs-build:
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -753,7 +753,7 @@ jobs:
 
   test-memray:
     name: Test memray
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -783,7 +783,7 @@ jobs:
       DEPS: yes
       UV_PYTHON_PREFERENCE: only-managed
 
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -824,7 +824,7 @@ jobs:
 
   test-plugin:
     name: Test Pydantic plugin
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -847,7 +847,7 @@ jobs:
 
   test-mypy:
     name: Mypy typechecking tests
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -878,7 +878,7 @@ jobs:
 
   test-typechecking-integration:
     name: Typechecking integration tests
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -906,7 +906,7 @@ jobs:
 
   coverage-combine:
     needs: [test, test-mypy]
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     env:
       UV_NO_SYNC: '1'
 
@@ -949,7 +949,7 @@ jobs:
 
   coverage-pr-comment:
     needs: coverage-combine
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     if: github.event_name == 'pull_request'
     permissions:
       pull-requests: write
@@ -980,7 +980,7 @@ jobs:
 
   test-typing-extensions:
     name: Test typing-extensions (`main` branch) on Python ${{ matrix.python-version }}
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     strategy:
       fail-fast: false
       matrix:
@@ -1011,7 +1011,7 @@ jobs:
     outputs:
       result: ${{ steps.all-green.outputs.result }}
     needs: [lint, docs-build, test, test-memray, test-mypy, test-plugin, core-test-os, core-test-debug, core-build-pyemscripten]
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
 
     steps:
       - name: Decide whether the needed jobs succeeded or failed
@@ -1023,7 +1023,7 @@ jobs:
   deploy-docs:
     needs: [check]
     if: needs.check.outputs.result == 'success' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     steps:
       - name: Generate app token
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
@@ -1045,7 +1045,7 @@ jobs:
   release-pydantic-core:
     needs: [core-test-builds-arch, core-test-builds-os, core-build-sdist, core-test-python-debug, check]
     if: needs.check.outputs.result == 'success' && startsWith(github.ref, 'refs/tags/')
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     environment: release
 
     permissions:
@@ -1119,7 +1119,7 @@ jobs:
   release-pydantic:
     needs: [build-pydantic, release-pydantic-core]
     if: startsWith(github.ref, 'refs/tags/')
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
     environment: release
 
     permissions:
@@ -1171,7 +1171,7 @@ jobs:
     name: Send tweet
     needs: [build-pydantic, release-pydantic]
     if: needs.release-pydantic.result == 'success'
-    runs-on: ubuntu-latest
+    runs-on: graphide-linux-x64-4
 
     steps:
       - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
