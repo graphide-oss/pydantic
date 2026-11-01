@@ -147,7 +147,7 @@ jobs:
           # was just a dummy variable to set a default value for target
           - target: undefined
 
-    runs-on: ${{ matrix.runs-on || format('{0}-latest', (matrix.os == 'linux' && 'ubuntu') || matrix.os) }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -205,7 +205,7 @@ jobs:
           path: pydantic-core/dist
 
   core-build-pgo:
-    name: core / Build PGO-optimized on ${{ matrix.platform.os }} / ${{ matrix.interpreter }}
+    name: core / Build PGO-optimized on ${{ matrix.os }} / ${{ matrix.interpreter }}
     # only run on push to main, if a full build was requested or on release:
     if: startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'full build')
     permissions:
@@ -216,14 +216,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform:
+        os: [linux, linux_aarch64]
+        interpreter: ['3.10', '3.11', '3.12', '3.13', '3.14', '3.14t', '3.15', '3.15t']
+        include:
           - os: linux
             runs-on: ubuntu-latest
           - os: linux_aarch64
             runs-on: ubuntu-24.04-arm
-        interpreter: ['3.10', '3.11', '3.12', '3.13', '3.14', '3.14t', '3.15', '3.15t']
 
-    runs-on: ${{ matrix.platform.runs-on }}
+    runs-on: ${{ matrix.runs-on }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -253,7 +254,7 @@ jobs:
           interpreter: ${{ matrix.interpreter }}
           rust-toolchain: ${{ steps.rust-toolchain.outputs.name }}
 
-      - run: ${{ (startsWith(matrix.platform.os, 'windows') && 'dir') || 'ls -lh' }} dist/
+      - run: ${{ (startsWith(matrix.os, 'windows') && 'dir') || 'ls -lh' }} dist/
         working-directory: pydantic-core
 
       - uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
@@ -263,7 +264,7 @@ jobs:
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: pydantic_core_pypi_files_${{ matrix.platform.os }}_${{ matrix.interpreter }}
+          name: pydantic_core_pypi_files_${{ matrix.os }}_${{ matrix.interpreter }}
           path: pydantic-core/dist
 
   core-build-pyemscripten:
@@ -437,19 +438,20 @@ jobs:
             uv run --no-sync python -c 'from pydantic_core._pydantic_core import build_info; print(f"{build_info=}")'
 
   core-test-builds-os:
-    name: core / Test build on ${{ matrix.platform.os }}
+    name: core / Test build on ${{ matrix.os }}
     needs: [core-build, core-build-pgo]
 
     strategy:
       fail-fast: false
       matrix:
-        platform:
-          - runs-on: ubuntu-latest
-            os: linux
-          - runs-on: ubuntu-24.04-arm
-            os: linuw_aarch64
+        os: [linux, linuw_aarch64]
+        include:
+          - os: linux
+            runs-on: ubuntu-latest
+          - os: linuw_aarch64
+            runs-on: ubuntu-24.04-arm
 
-    runs-on: ${{ matrix.platform.runs-on }}
+    runs-on: ${{ matrix.runs-on }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -486,7 +488,7 @@ jobs:
       matrix:
         os: [ubuntu]
 
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -781,7 +783,7 @@ jobs:
       DEPS: yes
       UV_PYTHON_PREFERENCE: only-managed
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
